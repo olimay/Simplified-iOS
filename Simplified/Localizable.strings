@@ -18,6 +18,7 @@
 "DownloadCouldNotBeCompletedFormat" = "The download for %@ could not be completed.";
 "DownloadFailed" = "Download Failed";
 "Downloading" = "Downloading";
+"Error" = "Error";
 "Feedback" = "Feedback";
 "Hide" = "Hide";
 "LibraryCard" = "Library Card";

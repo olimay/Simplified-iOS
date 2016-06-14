@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 /// This class conforms to draft-nottingham-http-problem-03. See 
 /// https://tools.ietf.org/html/draft-nottingham-http-problem-03 for further information.
@@ -38,5 +38,14 @@ import Foundation
     } else {
       self.problemInstance = nil
     }
+  }
+  
+  func presentAsAlertOnViewController(viewController: UIViewController, completion: (() -> Void)?) {
+    // Show the title as the message with a generic title if we have no detail.
+    let title = self.detail == nil ? NSLocalizedString("Error", comment: "") : self.title;
+    let message = self.detail == nil ? self.title : self.detail
+    
+    let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+    viewController.presentViewController(alertController, animated: true, completion: completion)
   }
 }
