@@ -669,22 +669,22 @@
 				11396FB8193D289100E16EE8 /* NSDate+NYPLDateAdditions.m */,
 				119BEB87198C43A600121439 /* NSString+NYPLStringAdditions.h */,
 				119BEB88198C43A600121439 /* NSString+NYPLStringAdditions.m */,
-				114B7F141A3644CF00B8582B /* NYPLTenPrintCoverView+NYPLImageAdditions.h */,
-				114B7F151A3644CF00B8582B /* NYPLTenPrintCoverView+NYPLImageAdditions.m */,
-				11A14DF21A1BF94F00D6C510 /* UIColor+NYPLColorAdditions.h */,
-				11A14DF31A1BF94F00D6C510 /* UIColor+NYPLColorAdditions.m */,
-				11E0208B197F05D9009DEA93 /* UIFont+NYPLSystemFontOverride.h */,
-				11E0208C197F05D9009DEA93 /* UIFont+NYPLSystemFontOverride.m */,
-				1107835C19816E3D0071AB1E /* UIView+NYPLViewAdditions.h */,
-				1107835D19816E3D0071AB1E /* UIView+NYPLViewAdditions.m */,
 				085640CC1BB99FC30088BDBF /* NSURL+NYPLURLAdditions.h */,
 				085640CD1BB99FC30088BDBF /* NSURL+NYPLURLAdditions.m */,
 				085D31DD1BE3CD3C007F7672 /* NSURLRequest+NYPLURLRequestAdditions.h */,
 				085D31DE1BE3CD3C007F7672 /* NSURLRequest+NYPLURLRequestAdditions.m */,
-				081387551BC574DA003DEA6A /* UILabel+NYPLAppearanceAdditions.h */,
-				081387561BC574DA003DEA6A /* UILabel+NYPLAppearanceAdditions.m */,
+				114B7F141A3644CF00B8582B /* NYPLTenPrintCoverView+NYPLImageAdditions.h */,
+				114B7F151A3644CF00B8582B /* NYPLTenPrintCoverView+NYPLImageAdditions.m */,
 				081387581BC5767F003DEA6A /* UIButton+NYPLAppearanceAdditions.h */,
 				081387591BC5767F003DEA6A /* UIButton+NYPLAppearanceAdditions.m */,
+				11A14DF21A1BF94F00D6C510 /* UIColor+NYPLColorAdditions.h */,
+				11A14DF31A1BF94F00D6C510 /* UIColor+NYPLColorAdditions.m */,
+				11E0208B197F05D9009DEA93 /* UIFont+NYPLSystemFontOverride.h */,
+				11E0208C197F05D9009DEA93 /* UIFont+NYPLSystemFontOverride.m */,
+				081387551BC574DA003DEA6A /* UILabel+NYPLAppearanceAdditions.h */,
+				081387561BC574DA003DEA6A /* UILabel+NYPLAppearanceAdditions.m */,
+				1107835C19816E3D0071AB1E /* UIView+NYPLViewAdditions.h */,
+				1107835D19816E3D0071AB1E /* UIView+NYPLViewAdditions.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -1062,6 +1062,7 @@
 				111559EB19B8FA530003BE94 /* NYPLXML.h */,
 				111559EC19B8FA590003BE94 /* NYPLXML.m */,
 				AE77E8DE5454517F1AE119BF /* OPDS */,
+				2DF8D8481D0E21D300A4C14E /* ProblemDetail.swift */,
 				119504051994061E009FB788 /* Reader */,
 				84B7A3411B84E8FE00584FB2 /* Resources */,
 				11C5DCEE1976D19E005A9945 /* Settings */,
@@ -1069,7 +1070,6 @@
 				A823D817192BABA400B55DE2 /* Supporting Files */,
 				2DC8D9DB1D09F797007DD125 /* UpdateCheck.swift */,
 				2DC8D9DD1D09F9B4007DD125 /* UpdateCheckShim.swift */,
-				2DF8D8481D0E21D300A4C14E /* ProblemDetail.swift */,
 			);
 			path = Simplified;
 			sourceTree = "<group>";

@@ -22,7 +22,7 @@
 
 // |handler| may not be nil. |handler| is strongly retained. |data| will never be nil as the handler
 // is only called if the data was downloaded successfully. The handler may return nil to indicate
-// that there is something wrong with the data.
+// that there is something wrong with the data which will cause a generic alert to be presented.
 - (instancetype)initWithURL:(NSURL *)URL
           completionHandler:(UIViewController *(^)(NYPLRemoteViewController *remoteViewController,
                                                    NSData *data,

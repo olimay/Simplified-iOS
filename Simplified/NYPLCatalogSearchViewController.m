@@ -1,6 +1,9 @@
 // TODO: This class duplicates much of the functionality of NYPLCatalogUngroupedFeedViewController.
 // After it is complete, the common portions must be factored out.
 
+// FIXME: This class is apparently now being used for My Books and Holds as well which is not
+// appropriate.
+
 #import "NSString+NYPLStringAdditions.h"
 #import "NYPLBook.h"
 #import "NYPLBookCell.h"

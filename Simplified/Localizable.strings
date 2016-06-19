@@ -22,6 +22,8 @@
 "Feedback" = "Feedback";
 "Hide" = "Hide";
 "LibraryCard" = "Library Card";
+"Location" = "Location";
+"LocationRequiredMessage" = "Location information is required for Sign Up. Please allow access to location information in the iOS settings";
 "LogIn" = "Log In";
 "More..." = "More…";
 "MoreBooks" = "More %@ books";
@@ -162,8 +164,6 @@
   "You need a library card to download this book.";
 "SettingsAccountViewControllerMessageInvalidPIN" =
   "Your PIN has changed. Enter your new PIN.";
-"Location" = "Location";
-"LocationRequiredMessage" = "Location information is required for Sign Up. Please allow access to location information in the iOS settings";
 
 // NYPLEULAViewController && NYPLSettingsEULAViewController
 "Accept" = "Accept";
@@ -171,6 +171,10 @@
 "EULA" = "User Agreement";
 "EULAHaveToAgree" = "You must accept the End User License Agreement to use this application.";
 "NOTICE" = "NOTICE";
+
+// NYPLRemoteViewController
+
+"RemoteViewControllerUnknownServerErrorMessage" = "An unknown server error occurred. Please try again later.";
 
 // NYPLSettingsPrivacyPolicyViewController
 "PrivacyPolicy" = "Privacy Policy";

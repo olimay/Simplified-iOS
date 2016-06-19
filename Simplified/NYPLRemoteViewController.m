@@ -1,9 +1,11 @@
 #import "NYPLConfiguration.h"
+#import "NYPLJSON.h"
 #import "NYPLReloadView.h"
 #import "NYPLRemoteViewController.h"
 #import "UIView+NYPLViewAdditions.h"
 #import "NYPLAlertController.h"
 #import "NYPLProblemDocument.h"
+#import "SimplyE-Swift.h"
 
 @interface NYPLRemoteViewController () <NSURLConnectionDataDelegate>
 
@@ -114,39 +116,52 @@
 {
   [self.activityIndicatorView stopAnimating];
   
-  if ([(NSHTTPURLResponse *)self.response statusCode] != 200
-      && ([self.response.MIMEType isEqualToString:@"application/problem+json"]
-          || [self.response.MIMEType isEqualToString:@"application/api-problem+json"]))
-  {
-    NYPLProblemDocument *problem = [NYPLProblemDocument problemDocumentWithData:self.data];
-    NYPLAlertController *alert = [NYPLAlertController alertWithTitle:problem.title message:problem.detail];
-    [alert setProblemDocument:problem displayDocumentMessage:NO];
-    [self presentViewController:alert animated:YES completion:nil];
-  }
-  
-  UIViewController *const viewController = self.handler(self, self.data, self.response);
-  
-  if(viewController) {
-    [self addChildViewController:viewController];
-    viewController.view.frame = self.view.bounds;
-    [self.view addSubview:viewController.view];
-    if(viewController.navigationItem.rightBarButtonItems) {
-      self.navigationItem.rightBarButtonItems = viewController.navigationItem.rightBarButtonItems;
-    }
-    if(viewController.navigationItem.leftBarButtonItems) {
-      self.navigationItem.leftBarButtonItems = viewController.navigationItem.leftBarButtonItems;
-    }
-    if(viewController.navigationItem.title) {
-      self.navigationItem.title = viewController.navigationItem.title;
-    }
-    [viewController didMoveToParentViewController:self];
-  } else {
-    self.reloadView.hidden = NO;
-  }
+  NSHTTPURLResponse *const response = (NSHTTPURLResponse *)self.response;
+  NSData *const data = self.data;
   
   self.response = nil;
   self.connection = nil;
   self.data = nil;
+  
+  if (response.statusCode == 200) {
+    UIViewController *const viewController = self.handler(self, data, response);
+    if(viewController) {
+      [self addChildViewController:viewController];
+      viewController.view.frame = self.view.bounds;
+      [self.view addSubview:viewController.view];
+      if(viewController.navigationItem.rightBarButtonItems) {
+        self.navigationItem.rightBarButtonItems = viewController.navigationItem.rightBarButtonItems;
+      }
+      if(viewController.navigationItem.leftBarButtonItems) {
+        self.navigationItem.leftBarButtonItems = viewController.navigationItem.leftBarButtonItems;
+      }
+      if(viewController.navigationItem.title) {
+        self.navigationItem.title = viewController.navigationItem.title;
+      }
+      [viewController didMoveToParentViewController:self];
+    } else {
+      self.reloadView.hidden = NO;
+      [self presentUnknownServerError];
+    }
+  } else if([response.MIMEType isEqualToString:@"application/problem+json"]
+            || [response.MIMEType isEqualToString:@"application/api-problem+json"]) {
+    id const JSON = NYPLJSONObjectFromData(data);
+    if([JSON isKindOfClass:[NSDictionary class]]) {
+      ProblemDetail *const problemDetail = [[ProblemDetail alloc] initWithJSON:JSON];
+      if(problemDetail) {
+        [problemDetail presentAsAlertOnViewController:self completion:nil];
+      } else {
+        self.reloadView.hidden = NO;
+        [self presentUnknownServerError];
+      }
+    } else {
+      self.reloadView.hidden = NO;
+      [self presentUnknownServerError];
+    }
+  } else {
+    self.reloadView.hidden = NO;
+    [self presentUnknownServerError];
+  }
 }
 
 #pragma mark NSURLConnectionDelegate
@@ -161,6 +176,37 @@
   self.connection = nil;
   self.data = nil;
   self.response = nil;
+  
+  UIAlertController *const alertController =
+    [UIAlertController
+     alertControllerWithTitle:NSLocalizedString(@"ConnectionFailed", nil)
+     message:[error localizedDescription] ? [error localizedDescription] : NSLocalizedString(@"CheckConnection", nil)
+     preferredStyle:UIAlertControllerStyleAlert];
+  
+  [alertController addAction:[UIAlertAction
+                              actionWithTitle:NSLocalizedString(@"OK", nil)
+                              style:UIAlertActionStyleDefault
+                              handler:nil]];
+  
+  [self presentViewController:alertController animated:YES completion:nil];
+}
+
+#pragma mark -
+
+- (void)presentUnknownServerError
+{
+  UIAlertController *const alertController =
+  [UIAlertController
+   alertControllerWithTitle:NSLocalizedString(@"ConnectionFailed", nil)
+   message:NSLocalizedString(@"RemoteViewControllerUnknownServerErrorMessage", nil)
+   preferredStyle:UIAlertControllerStyleAlert];
+  
+  [alertController addAction:[UIAlertAction
+                              actionWithTitle:NSLocalizedString(@"OK", nil)
+                              style:UIAlertActionStyleDefault
+                              handler:nil]];
+  
+  [self presentViewController:alertController animated:YES completion:nil];
 }
 
 @end
