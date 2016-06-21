@@ -5,6 +5,7 @@
 #import "NYPLOPDSRelation.h"
 #import "NYPLSession.h"
 #import "NYPLXML.h"
+#import "SimplyE-Swift.h"
 
 #import "NYPLOPDSFeed.h"
 
@@ -89,6 +90,23 @@ static NYPLOPDSFeedType TypeImpliedByEntry(NYPLOPDSEntry *const entry)
   }];
 }
 
++ (void)withURL:(NSURL *const)URL
+        handler:(void (^ const)(NYPLOPDSFeed *feed, NSError *error, ProblemDetail *problemDetail))handler
+{
+  if(!URL || !handler) {
+    @throw NSInvalidArgumentException;
+  }
+  
+  [[NYPLSession sharedSession]
+   withURL:URL
+   completionHandler:^(NSData *const data, NSURLResponse *const response, NSError *const error) {
+     NSHTTPURLResponse *const HTTPURLResponse = (NSHTTPURLResponse *)response;
+     if(HTTPURLResponse.statusCode == 200) {
+       
+     }
+   }];
+}
+
 - (instancetype)initWithXML:(NYPLXML *const)feedXML
 {
   self = [super init];
@@ -98,6 +116,10 @@ static NYPLOPDSFeedType TypeImpliedByEntry(NYPLOPDSEntry *const entry)
     return nil;
   }
   
+  // FIXME: This hack should not exist here. We know when to an expect an entry and should
+  // create an entry directly. This apprach also does not properly initialize ANY of the
+  // other required properties.
+  //
   // Sometimes we get back JUST an entry, and in that case we just want to construct a feed with
   // nothing set other than the entry.
   if ([feedXML.name isEqual:@"entry"]) {
