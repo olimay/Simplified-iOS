@@ -91,7 +91,7 @@ static NYPLOPDSFeedType TypeImpliedByEntry(NYPLOPDSEntry *const entry)
 }
 
 + (void)withURL:(NSURL *const)URL
-        handler:(void (^ const)(NYPLOPDSFeed *feed, NSError *error, ProblemDetail *problemDetail))handler
+        handler:(void (^ const)(NYPLOPDSFeed *feed, ProblemDetail *problemDetail, NSError *error))handler
 {
   if(!URL || !handler) {
     @throw NSInvalidArgumentException;
@@ -101,8 +101,25 @@ static NYPLOPDSFeedType TypeImpliedByEntry(NYPLOPDSEntry *const entry)
    withURL:URL
    completionHandler:^(NSData *const data, NSURLResponse *const response, NSError *const error) {
      NSHTTPURLResponse *const HTTPURLResponse = (NSHTTPURLResponse *)response;
-     if(HTTPURLResponse.statusCode == 200) {
-       
+     NSError *const unknownError = [NSError errorWithDomain:NSURLErrorDomain
+                                                       code:kCFNetServiceErrorUnknown
+                                                   userInfo:nil];
+     NSError *const returnedError = error ? error : unknownError;
+     if(data) {
+       if(HTTPURLResponse.statusCode == 200) {
+         NYPLXML *const XML = [NYPLXML XMLWithData:data];
+         if(!XML) {
+           [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+             handler(nil, nil, returnedError);
+           }];
+         }
+       } else {
+         
+       }
+     } else {
+       [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+         handler(nil, nil, returnedError);
+       }];
      }
    }];
 }
