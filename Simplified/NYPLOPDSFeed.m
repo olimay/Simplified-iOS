@@ -1,5 +1,6 @@
 #import "NSDate+NYPLDateAdditions.h"
 #import "NYPLAsync.h"
+#import "NYPLJSON.h"
 #import "NYPLOPDSEntry.h"
 #import "NYPLOPDSLink.h"
 #import "NYPLOPDSRelation.h"
@@ -101,20 +102,38 @@ static NYPLOPDSFeedType TypeImpliedByEntry(NYPLOPDSEntry *const entry)
    withURL:URL
    completionHandler:^(NSData *const data, NSURLResponse *const response, NSError *const error) {
      NSHTTPURLResponse *const HTTPURLResponse = (NSHTTPURLResponse *)response;
-     NSError *const unknownError = [NSError errorWithDomain:NSURLErrorDomain
-                                                       code:kCFNetServiceErrorUnknown
-                                                   userInfo:nil];
-     NSError *const returnedError = error ? error : unknownError;
+     NSError *const returnedError = error ? error : [NSError errorWithDomain:NSURLErrorDomain
+                                                                        code:kCFNetServiceErrorUnknown
+                                                                    userInfo:nil];;
      if(data) {
        if(HTTPURLResponse.statusCode == 200) {
          NYPLXML *const XML = [NYPLXML XMLWithData:data];
-         if(!XML) {
+         if(XML) {
+           NYPLOPDSFeed *const feed = [[[self class] alloc] initWithXML:XML];
+           if(feed) {
+             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+               handler(feed, nil, nil);
+             }];
+           } else {
+             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+               handler(nil, nil, returnedError);
+             }];
+           }
+         } else {
            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
              handler(nil, nil, returnedError);
            }];
          }
        } else {
-         
+         id const JSON = NYPLJSONObjectFromData(data);
+         if([JSON isKindOfClass:[NSDictionary class]]) {
+           ProblemDetail *const problemDetail = [[ProblemDetail alloc] initWithJSON:JSON];
+           handler(nil, problemDetail, returnedError);
+         } else {
+           [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+             handler(nil, nil, returnedError);
+           }];
+         }
        }
      } else {
        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
