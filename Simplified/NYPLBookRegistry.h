@@ -4,6 +4,7 @@
 
 @class NYPLBook;
 @class NYPLBookLocation;
+@class ProblemDetail;
 
 // This is broadcast whenever the book registry is modified.
 static NSString *const NYPLBookRegistryDidChangeNotification =
@@ -43,8 +44,8 @@ static NSString *const NYPLBookProcessingDidChangeNotification =
 
 // Syncs the latest content from the server. Attempts to sync while a sync is already in progress
 // will simply be ignored. Resetting the registry while a sync is in progress will cause the handler
-// not to be called.
-- (void)syncWithCompletionHandler:(void (^)(BOOL success))handler;
+// not to be called. Both arguments to the handler will be nil if the sync was successful.
+- (void)syncWithCompletionHandler:(void (^)(ProblemDetail *problemDetail, NSError *error))handler;
 
 // Calls syncWithCompletionHandler: with a handler that presents standard success/failure alerts on
 // completion.

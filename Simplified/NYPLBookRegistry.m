@@ -7,6 +7,7 @@
 #import "NYPLOPDS.h"
 #import "NYPLSettings.h"
 #import "NYPLMyBooksDownloadCenter.h"
+#import "SimplyE-Swift.h"
 
 #import "NYPLBookRegistry.h"
 
@@ -222,7 +223,7 @@ static NSString *const RecordsKey = @"records";
   }
 }
 
-- (void)syncWithCompletionHandler:(void (^)(BOOL success))handler
+- (void)syncWithCompletionHandler:(void (^)(ProblemDetail *problemDetail, NSError *error))handler
 {
   @synchronized(self) {
     if(self.syncing || ![[NYPLAccount sharedAccount] hasBarcodeAndPIN]) {
@@ -236,14 +237,14 @@ static NSString *const RecordsKey = @"records";
   
   [NYPLOPDSFeed
    withURL:[NYPLConfiguration loanURL]
-   completionHandler:^(NYPLOPDSFeed *const feed, NSDictionary *error) {
+   handler:^(NYPLOPDSFeed *const feed, ProblemDetail *const problemDetail, NSError *const error) {
      if(!feed) {
        NYPLLOG(@"Failed to obtain sync data.");
        self.syncing = NO;
        [self broadcastChange];
        [[NSOperationQueue mainQueue]
         addOperationWithBlock:^{
-          if(handler) handler(NO);
+          if(handler) handler(problemDetail, error);
         }];
        return;
      }
@@ -284,7 +285,7 @@ static NSString *const RecordsKey = @"records";
        [self broadcastChange];
        [[NSOperationQueue mainQueue]
         addOperationWithBlock:^{
-          if(handler) handler(YES);
+          if(handler) handler(nil, nil);
         }];
      };
      
@@ -298,8 +299,8 @@ static NSString *const RecordsKey = @"records";
 
 - (void)syncWithStandardAlertsOnCompletion
 {
-  [self syncWithCompletionHandler:^(BOOL success) {
-    if(success) {
+  [self syncWithCompletionHandler:^(ProblemDetail *const problemDetail, NSError *const error) {
+    if(!problemDetail && !error) {
       [[[UIAlertView alloc]
         initWithTitle:NSLocalizedString(@"SyncComplete", nil)
         message:NSLocalizedString(@"YourBooksWereSyncedSuccessfully", nil)
@@ -309,10 +310,18 @@ static NSString *const RecordsKey = @"records";
        show];
       
       [[NYPLBookRegistry sharedRegistry] save];
+    } else if(problemDetail) {
+      [[[UIAlertView alloc]
+        initWithTitle:[NSString stringWithFormat:@"%@ (%@)", NSLocalizedString(@"SyncFailed", nil), problemDetail.title]
+        message:(problemDetail.detail ? problemDetail.detail : NSLocalizedString(@"CheckConnection", nil))
+        delegate:nil
+        cancelButtonTitle:nil
+        otherButtonTitles:NSLocalizedString(@"OK", nil), nil]
+       show];
     } else {
       [[[UIAlertView alloc]
         initWithTitle:NSLocalizedString(@"SyncFailed", nil)
-        message:NSLocalizedString(@"CheckConnection", nil)
+        message:[error localizedDescription]
         delegate:nil
         cancelButtonTitle:nil
         otherButtonTitles:NSLocalizedString(@"OK", nil), nil]
