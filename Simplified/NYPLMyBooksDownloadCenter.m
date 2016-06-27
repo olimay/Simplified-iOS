@@ -11,6 +11,7 @@
 #import "NYPLOPDSFeed.h"
 #import "NYPLSession.h"
 #import "NYPLProblemDocument.h"
+#import "SimplyE-Swift.h"
 
 #import "NYPLMyBooksDownloadCenter.h"
 #import "NYPLMyBooksDownloadInfo.h"
@@ -325,38 +326,68 @@ didDismissWithButtonIndex:(NSInteger const)buttonIndex
   
   if(book.acquisition.revoke) {
     [[NYPLBookRegistry sharedRegistry] setProcessing:YES forIdentifier:book.identifier];
-    [NYPLOPDSFeed withURL:book.acquisition.revoke completionHandler:^(NYPLOPDSFeed *feed, NSDictionary *error) {
+    [NYPLOPDSFeed
+     withURL:book.acquisition.revoke
+     handler:^(NYPLOPDSFeed *const feed, ProblemDetail *const problemDetail, NSError *const error) {
       [[NYPLBookRegistry sharedRegistry] setProcessing:NO forIdentifier:book.identifier];
       
-      if(feed && feed.entries.count == 1)  {
-        NYPLOPDSEntry *const entry = feed.entries[0];
-        if(downloaded) {
-          [self deleteLocalContentForBookIdentifier:identifier];
-        }
-        NYPLBook *returnedBook = [NYPLBook bookWithEntry:entry];
-        if(returnedBook) {
-          [[NYPLBookRegistry sharedRegistry] updateAndRemoveBook:returnedBook];
+      if(feed)  {
+        if(feed.entries.count == 1) {
+          NYPLOPDSEntry *const entry = feed.entries[0];
+          if(downloaded) {
+            [self deleteLocalContentForBookIdentifier:identifier];
+          }
+          NYPLBook *returnedBook = [NYPLBook bookWithEntry:entry];
+          if(returnedBook) {
+            [[NYPLBookRegistry sharedRegistry] updateAndRemoveBook:returnedBook];
+          } else {
+            NYPLLOG(@"Failed to create book from entry.");
+          }
         } else {
-          NYPLLOG(@"Failed to create book from entry.");
+          [[NYPLAlertController
+            alertWithTitle:NSLocalizedString(@"ReturnFailed", nil)
+            message:[NSString stringWithFormat:NSLocalizedString(@"ReturnCouldNotBeCompletedFormat", nil), bookTitle]]
+           presentFromViewControllerOrNil:nil
+           animated:YES
+           completion:nil];
         }
-      } else {
-        if([error[@"type"] isEqualToString:NYPLProblemDocumentTypeNoActiveLoan]) {
+      } else if([problemDetail.problemType isEqual:[NSURL URLWithString:NYPLProblemDocumentTypeNoActiveLoan]]) {
           if(downloaded) {
             [self deleteLocalContentForBookIdentifier:identifier];
           }
           [[NYPLBookRegistry sharedRegistry] removeBookForIdentifier:identifier];
-        } else {
-          [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            NYPLAlertController *const alert = [NYPLAlertController
-                                                alertWithTitle:@"ReturnFailed"
-                                                message:@"ReturnCouldNotBeCompletedFormat", bookTitle];
-            if(error) {
-              [alert setProblemDocument:[NYPLProblemDocument problemDocumentWithDictionary:error]
-                 displayDocumentMessage:YES];
-            }
-            [alert presentFromViewControllerOrNil:nil animated:YES completion:nil];
-          }];
-        }
+      } else {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+          if(problemDetail) {
+            [[NYPLAlertController
+              alertWithTitle:[NSString stringWithFormat:@"%@ (%@)",
+                              NSLocalizedString(@"ReturnFailed", nil),
+                              problemDetail.title]
+              message:(problemDetail.detail
+                       ? [NSString stringWithFormat:@"%@ %@",
+                          [NSString stringWithFormat:
+                           NSLocalizedString(@"ReturnCouldNotBeCompletedFormat", nil),
+                           bookTitle],
+                          problemDetail.detail]
+                       : [NSString stringWithFormat:
+                          NSLocalizedString(@"ReturnCouldNotBeCompletedFormat", nil),
+                          bookTitle])]
+             presentFromViewControllerOrNil:nil
+             animated:YES
+             completion:nil];
+          } else {
+            [[NYPLAlertController
+              alertWithTitle:NSLocalizedString(@"ReturnFailed", nil)
+              message:[NSString stringWithFormat:@"%@ %@",
+                       [NSString stringWithFormat:
+                        NSLocalizedString(@"ReturnCouldNotBeCompletedFormat", nil),
+                        bookTitle],
+                       [error localizedDescription]]]
+             presentFromViewControllerOrNil:nil
+             animated:YES
+             completion:nil];
+          }
+        }];
       }
     }];
   } else {
