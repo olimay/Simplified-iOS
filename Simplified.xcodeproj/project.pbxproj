@@ -37,13 +37,9 @@
 		08A352261BDE8E700040BF1D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A352251BDE8E700040BF1D /* SystemConfiguration.framework */; };
 		08A352271BDE91B80040BF1D /* libRDServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A49C25461AE05A2600D63B89 /* libRDServices.a */; };
 		08A352291BDE91B80040BF1D /* libePub3-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A352281BDE91B80040BF1D /* libePub3-iOS.a */; };
-		08A3522A1BDE94170040BF1D /* libADEPT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A569A2C1B8351C6003B5B61 /* libADEPT.a */; };
-		08A3522B1BDE94170040BF1D /* libAdobe Content Filter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A7048961B94A6710046FFF0 /* libAdobe Content Filter.a */; };
 		08A352731BDFF5380040BF1D /* NYPLAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A352721BDFF5380040BF1D /* NYPLAlertController.m */; };
 		08B3CF861BF0F8FA00E6485E /* libBugsnag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B3CF851BF0F8FA00E6485E /* libBugsnag.a */; };
 		08C375461BD7CFF6005B233D /* NYPLSubmittingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C375451BD7CFF6005B233D /* NYPLSubmittingViewController.m */; };
-		08C469C11BDAAEB1009D8AFD /* libADEPT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A569A2C1B8351C6003B5B61 /* libADEPT.a */; };
-		08C469C21BDAAEB1009D8AFD /* libAdobe Content Filter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A7048961B94A6710046FFF0 /* libAdobe Content Filter.a */; };
 		08C469CE1BDAB484009D8AFD /* NYPLRegistrationStoryboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C469CD1BDAB484009D8AFD /* NYPLRegistrationStoryboard.m */; };
 		11068C55196DD37900E8A94B /* NYPLNull.m in Sources */ = {isa = PBXBuildFile; fileRef = 11068C54196DD37900E8A94B /* NYPLNull.m */; };
 		11078357198160A50071AB1E /* NYPLBookDownloadFailedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 11078356198160A50071AB1E /* NYPLBookDownloadFailedCell.m */; };
@@ -552,7 +548,6 @@
 		B5ED41D91B8F6E2E009FC164 /* NYPLBookButtonsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NYPLBookButtonsView.m; sourceTree = "<group>"; };
 		BEEC686A5C71AFACFAC2A884 /* libPods-SimplyETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SimplyETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAE35BBA1B86289500BF9BC5 /* Simplified+RMSDK.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Simplified+RMSDK.xcconfig"; sourceTree = "<group>"; };
-		CAE35BC11B86308D00BF9BC5 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -570,10 +565,6 @@
 			files = (
 				080ADCBF1C04C26100C0575F /* libCHRTextFieldFormatter.a in Frameworks */,
 				08B3CF861BF0F8FA00E6485E /* libBugsnag.a in Frameworks */,
-				08C469C11BDAAEB1009D8AFD /* libADEPT.a in Frameworks */,
-				08C469C21BDAAEB1009D8AFD /* libAdobe Content Filter.a in Frameworks */,
-				08A3522A1BDE94170040BF1D /* libADEPT.a in Frameworks */,
-				08A3522B1BDE94170040BF1D /* libAdobe Content Filter.a in Frameworks */,
 				08A352291BDE91B80040BF1D /* libePub3-iOS.a in Frameworks */,
 				08A352271BDE91B80040BF1D /* libRDServices.a in Frameworks */,
 				08A352221BDE8E560040BF1D /* libicucore.tbd in Frameworks */,
@@ -933,7 +924,6 @@
 		A823D804192BABA400B55DE2 = {
 			isa = PBXGroup;
 			children = (
-				CAE35BC11B86308D00BF9BC5 /* README */,
 				B54F998D1BAC976C0033F303 /* Simplified.debug.xcconfig */,
 				B54F998E1BAC97AB0033F303 /* Simplified.release.xcconfig */,
 				5A5B90101B9460D3002C53E9 /* Simplified.xcconfig */,
