@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+if [[ ! -d adept-ios || ! -d adobe-content-filter ]]; then
+  echo "You must clone the DRM-related repositories first."
+  echo "See README.md for details."
+  exit 1
+fi
+
+pushd adept-ios
+git checkout 2ef2caf3b39d23859186722c2746f495bbe895f8
+popd
+
+pushd adobe-content-filter
+git checkout eb1dfe88e1cd71faec28828223c680cd184d9e16
+popd
+
+cp Simplified+RMSDK.xcconfig-disabled Simplified+RMSDK.xcconfig

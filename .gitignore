@@ -6,3 +6,8 @@ DerivedData
 .idea
 Build
 adobe-rmsdk
+
+# Optional DRM dependencies
+Simplified+RMSDK.xcconfig
+adept-ios
+adobe-content-filter

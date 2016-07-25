@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rm -rf adobe-ios
+rm -rf adobe-content-filter
+rm -rf Simplified+RMSDK.xcconfig
