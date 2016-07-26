@@ -1,30 +1,28 @@
-# Building With Adobe DRM
-
-01. `git clone https://github.com/NYPL/Simplified-iOS.git` or `git clone git@github.com:NYPL-Simplified/Simplified-iOS.git`
-02. `cd Simplified-iOS`
-03. `git submodule update --init --recursive`
-04. Install [Cocoapods](https://cocoapods.org) if you haven't already.
-05. `pod install`
-06. Symlink the "DRM_Connector_Prerelease" directory to "adobe-rmsdk" within the "Simplified-iOS" directory. (You will need to have obtained the Adobe DRM Connector prerelease from Adobe.)
-07. Follow the instructions in "adobe-rmsdk/RMSDK_User_Manual(obj).pdf" to build OpenSSL (section 12.1) and cURL (section 12.3).
-08. `sh adobe-rmsdk-build.sh`
-09. `open Simplified.xcworkspace`
-10. Build.
-
 # Building Without DRM
 
-**Note:** This configuration is not currently supported. In the interim, you _should_ be able to get it to build via the following steps:
-
 01. `git clone https://github.com/NYPL/Simplified-iOS.git` or `git clone git@github.com:NYPL-Simplified/Simplified-iOS.git`
 02. `cd Simplified-iOS`
 03. `git submodule update --init --recursive`
 04. Install [Cocoapods](https://cocoapods.org) if you haven't already.
 05. `pod install`
-06. `rm -rf adept-ios adobe-content-filter`
-07. `open Simplified.xcworkspace`
-08. Remove "Simplified+RMSDK.xcconfig" from the project.
-09. Delete "libAdept.a" and "libAdobe Content Filter.a" from "Link Binary with Libraries" for the "SimplyE" target.
-10. Build.
+06. `open Simplified.xcworkspace`
+07. Build.
+
+# Enabling Support for Adobe DRM
+
+01. Follow the steps for "Building Without DRM".
+02. Symlink the "DRM_Connector_Prerelease" directory to "adobe-rmsdk". *You will need to have obtained the Adobe DRM Connector prerelease from Adobe.*
+03. Follow the instructions in "adobe-rmsdk/RMSDK_User_Manual(obj).pdf" to build OpenSSL (section 12.1) and cURL (section 12.3).
+04. `./adobe-rmsdk-build`
+05. `git clone https://github.com/NYPL/DRM-iOS-Adobe.git adept-ios` or `git clone git@github.com:NYPL-Simplified/DRM-iOS-Adobe.git adept-ios`
+06. `git clone https://github.com/NYPL/Adobe-Content-Filter.git adobe-content-filter` or `git clone git@github.com:NYPL-Simplified/Adobe-Content-Filter.git adobe-content-filter`
+07. `./drm-adobe-enable`
+08. `open Simplified.xcworkspace`
+09. Build.
+
+# Disabling Support for Adobe DRM
+
+01. `./drm-adobe-disable`
 
 # Contributing
 

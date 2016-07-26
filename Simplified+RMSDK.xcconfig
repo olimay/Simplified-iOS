@@ -1,3 +1,4 @@
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) FEATURE_DRM_CONNECTOR=1
 HEADER_SEARCH_PATHS = $(inherited) "$(SRCROOT)/adept-ios" "$(SRCROOT)/adobe-content-filter/public"
+LIBRARY_SEARCH_PATHS = $(inherited) $BUILT_PRODUCTS_DIR
 ADOBE_LDFLAGS = $(inherited) -lADEPT "-lAdobe Content Filter"
